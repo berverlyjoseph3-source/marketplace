@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard - ElectroShop</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+</head>
+<body>
+    <!-- Loading -->
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading Dashboard...</p>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand" onclick="window.location.href='index.html'">
+                <i class="fas fa-bolt"></i>
+                <h1>Electro<span>Shop</span></h1>
+            </div>
+
+            <div class="nav-search">
+                <input type="text" id="searchInput" placeholder="Search products...">
+                <button onclick="searchProducts()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="products.html"><i class="fas fa-shopping-bag"></i> Shop</a>
+                <a href="cart.html" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <div id="userMenu">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Dashboard Section -->
+    <section class="section dashboard-section">
+        <div class="container">
+            <div class="page-header">
+                <h1>My Dashboard</h1>
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Dashboard</span>
+                </div>
+            </div>
+
+            <div class="dashboard-layout">
+                <!-- Sidebar -->
+                <aside class="dashboard-sidebar">
+                    <div class="user-profile">
+                        <div class="profile-avatar" id="profileAvatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h3 id="userName">Loading...</h3>
+                            <p id="userEmail">...</p>
+                            <span class="member-since" id="memberSince">Member since 2024</span>
+                        </div>
+                    </div>
+
+                    <nav class="dashboard-nav">
+                        <a href="dashboard.html" class="active">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                        <a href="orders.html">
+                            <i class="fas fa-shopping-bag"></i> Orders
+                            <span class="badge" id="ordersCount">0</span>
+                        </a>
+                        <a href="wishlist.html">
+                            <i class="fas fa-heart"></i> Wishlist
+                            <span class="badge" id="wishlistCount">0</span>
+                        </a>
+                        <a href="profile.html">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </nav>
+
+                    <!-- Quick Stats -->
+                    <div class="quick-stats">
+                        <div class="stat-card">
+                            <i class="fas fa-shopping-cart"></i>
+                            <div>
+                                <h4>Orders</h4>
+                                <p id="totalOrders">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-dollar-sign"></i>
+                            <div>
+                                <h4>Total Spent</h4>
+                                <p id="totalSpent">$0</p>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="dashboard-main">
+                    <!-- Welcome Banner -->
+                    <div class="welcome-banner">
+                        <div class="welcome-content">
+                            <h2>Welcome back, <span id="welcomeName">User</span>!</h2>
+                            <p>Here's what's happening with your account today.</p>
+                        </div>
+                        <div class="welcome-actions">
+                            <button class="btn btn-outline" onclick="window.location.href='products.html'">
+                                <i class="fas fa-shopping-bag"></i> Continue Shopping
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card-large">
+                            <div class="stat-icon success">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="completedOrders">0</h3>
+                                <p>Completed Orders</p>
+                            </div>
+                        </div>
+                        <div class="stat-card-large">
+                            <div class="stat-icon warning">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="pendingOrders">0</h3>
+                                <p>Pending Orders</p>
+                            </div>
+                        </div>
+                        <div class="stat-card-large">
+                            <div class="stat-icon primary">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="wishlistItems">0</h3>
+                                <p>Wishlist Items</p>
+                            </div>
+                        </div>
+                        <div class="stat-card-large">
+                            <div class="stat-icon info">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalReviews">0</h3>
+                                <p>Reviews Written</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Orders -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Recent Orders</h3>
+                            <a href="orders.html" class="btn-link">View All</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="orders-table" id="recentOrders">
+                                <!-- Filled by JavaScript -->
+                                <div class="empty-state">
+                                    <i class="fas fa-shopping-bag"></i>
+                                    <p>No orders yet</p>
+                                    <a href="products.html" class="btn btn-primary">Start Shopping</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wishlist Preview -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Wishlist</h3>
+                            <a href="wishlist.html" class="btn-link">View All</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="wishlist-preview" id="wishlistPreview">
+                                <!-- Filled by JavaScript -->
+                                <div class="empty-state">
+                                    <i class="fas fa-heart"></i>
+                                    <p>Your wishlist is empty</p>
+                                    <a href="products.html" class="btn btn-outline">Browse Products</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommended Products -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Recommended For You</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="products-grid" id="recommendedProducts">
+                                <!-- Filled by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div class="quick-links">
+                        <h3>Quick Actions</h3>
+                        <div class="links-grid">
+                            <a href="profile.html" class="link-card">
+                                <i class="fas fa-user-edit"></i>
+                                <span>Update Profile</span>
+                            </a>
+                            <a href="#" onclick="changePassword()" class="link-card">
+                                <i class="fas fa-key"></i>
+                                <span>Change Password</span>
+                            </a>
+                            <a href="#" onclick="viewAddresses()" class="link-card">
+                                <i class="fas fa-address-book"></i>
+                                <span>Manage Addresses</span>
+                            </a>
+                            <a href="#" onclick="contactSupport()" class="link-card">
+                                <i class="fas fa-headset"></i>
+                                <span>Contact Support</span>
+                            </a>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Electro<span>Shop</span></h3>
+                    </div>
+                    <p>Your trusted electronics marketplace</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="products.html">Shop</a>
+                    <a href="dashboard.html">Dashboard</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="#" onclick="contactSupport()">Contact</a>
+                    <a href="#">FAQs</a>
+                    <a href="#">Shipping</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ElectroShop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/products.js"></script>
+    <script>
+        let userData = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            showLoading();
+            
+            // Check authentication
+            checkAuth();
+            
+            // Load user data
+            loadUserData();
+            
+            // Load dashboard data
+            loadDashboardData();
+            
+            // Update cart count
+            updateCartCount();
+            
+            setTimeout(hideLoading, 1000);
+        });
+        
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const token = localStorage.getItem('token');
+            
+            if (!user || !token) {
+                showAlert('Please login to access dashboard', 'warning');
+                window.location.href = 'login.html?redirect=dashboard.html';
+                return false;
+            }
+            
+            userData = user;
+            return true;
+        }
+        
+        function loadUserData() {
+            if (!userData) return;
+            
+            // Update user info
+            document.getElementById('userName').textContent = `${userData.firstName} ${userData.lastName}`;
+            document.getElementById('userEmail').textContent = userData.email;
+            document.getElementById('welcomeName').textContent = userData.firstName;
+            
+            // Format member since date
+            if (userData.createdAt) {
+                const date = new Date(userData.createdAt);
+                document.getElementById('memberSince').textContent = `Member since ${date.getFullYear()}`;
+            }
+            
+            // Update avatar
+            const avatar = document.getElementById('profileAvatar');
+            if (userData.avatar) {
+                avatar.innerHTML = `<img src="${userData.avatar}" alt="${userData.firstName}">`;
+            }
+        }
+        
+        async function loadDashboardData() {
+            try {
+                // Load user's orders
+                const orders = await loadUserOrders();
+                updateOrderStats(orders);
+                
+                // Load wishlist
+                const wishlist = await loadWishlist();
+                updateWishlistStats(wishlist);
+                
+                // Load recommended products
+                await loadRecommendedProducts();
+                
+                // Update badge counts
+                updateBadgeCounts(orders, wishlist);
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+        
+        function loadUserOrders() {
+            // In a real app, you would fetch from API
+            // For now, use localStorage or mock data
+            return new Promise((resolve) => {
+                const orders = JSON.parse(localStorage.getItem('user_orders') || '[]');
+                resolve(orders);
+            });
+        }
+        
+        function loadWishlist() {
+            return new Promise((resolve) => {
+                const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+                resolve(wishlist);
+            });
+        }
+        
+        function updateOrderStats(orders) {
+            // Update stats
+            document.getElementById('totalOrders').textContent = orders.length;
+            document.getElementById('ordersCount').textContent = orders.length;
+            
+            const completedOrders = orders.filter(order => order.status === 'delivered').length;
+            const pendingOrders = orders.filter(order => 
+                ['pending', 'processing', 'shipped'].includes(order.status)
+            ).length;
+            
+            document.getElementById('completedOrders').textContent = completedOrders;
+            document.getElementById('pendingOrders').textContent = pendingOrders;
+            
+            // Calculate total spent
+            const totalSpent = orders.reduce((total, order) => {
+                if (order.status === 'delivered') {
+                    return total + (order.totals?.total || 0);
+                }
+                return total;
+            }, 0);
+            
+            document.getElementById('totalSpent').textContent = `$${totalSpent.toFixed(2)}`;
+            
+            // Display recent orders
+            displayRecentOrders(orders.slice(0, 5));
+        }
+        
+        function updateWishlistStats(wishlist) {
+            document.getElementById('wishlistItems').textContent = wishlist.length;
+            document.getElementById('wishlistCount').textContent = wishlist.length;
+            
+            // Display wishlist preview
+            displayWishlistPreview(wishlist.slice(0, 4));
+        }
+        
+        function updateBadgeCounts(orders, wishlist) {
+            // Update navigation badges
+            document.getElementById('ordersCount').textContent = orders.length;
+            document.getElementById('wishlistCount').textContent = wishlist.length;
+        }
+        
+        function displayRecentOrders(orders) {
+            const container = document.getElementById('recentOrders');
+            if (!container) return;
+            
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-shopping-bag"></i>
+                        <p>No orders yet</p>
+                        <a href="products.html" class="btn btn-primary">Start Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = `
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Date</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${orders.map(order => `
+                            <tr>
+                                <td>${order.id || order.number}</td>
+                                <td>${formatDate(order.date)}</td>
+                                <td>${order.items?.length || 0} items</td>
+                                <td>$${(order.totals?.total || 0).toFixed(2)}</td>
+                                <td><span class="status-badge ${order.status}">${getStatusText(order.status)}</span></td>
+                                <td>
+                                    <button class="btn-view" onclick="viewOrder('${order.id}')">
+                                        View
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        
+        function displayWishlistPreview(items) {
+            const container = document.getElementById('wishlistPreview');
+            if (!container) return;
+            
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-heart"></i>
+                        <p>Your wishlist is empty</p>
+                        <a href="products.html" class="btn btn-outline">Browse Products</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="wishlist-items">
+                    ${items.map(item => `
+                        <div class="wishlist-item">
+                            <img src="${item.image || 'images/placeholder.jpg'}" 
+                                 alt="${item.name}"
+                                 onerror="this.src='images/placeholder.jpg'">
+                            <div class="item-info">
+                                <h4>${item.name}</h4>
+                                <div class="item-price">$${item.price}</div>
+                                <div class="item-actions">
+                                    <button class="btn-add-cart" onclick="addToCart('${item.id}')">
+                                        <i class="fas fa-cart-plus"></i> Add to Cart
+                                    </button>
+                                    <button class="btn-remove" onclick="removeFromWishlist('${item.id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        async function loadRecommendedProducts() {
+            try {
+                const container = document.getElementById('recommendedProducts');
+                if (!container) return;
+                
+                // Fetch featured products
+                const response = await fetch('http://localhost:5000/api/products/featured/random?limit=4');
+                const data = await response.json();
+                
+                if (data.success) {
+                    container.innerHTML = data.data.map(product => `
+                        <div class="product-card">
+                            <div class="product-image" onclick="window.location.href='product-detail.html?id=${product._id}'">
+                                <img src="${product.images?.[0]?.url || 'images/placeholder.jpg'}" 
+                                     alt="${product.name}"
+                                     onerror="this.src='images/placeholder.jpg'">
+                            </div>
+                            <div class="product-content">
+                                <h3 onclick="window.location.href='product-detail.html?id=${product._id}'">
+                                    ${product.name}
+                                </h3>
+                                <div class="product-price">
+                                    <span class="current-price">$${product.discountPrice || product.price}</span>
+                                </div>
+                                <button class="btn-add-cart" onclick="addToCart('${product._id}')">
+                                    <i class="fas fa-cart-plus"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading recommended products:', error);
+            }
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+        
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'Pending',
+                'processing': 'Processing',
+                'shipped': 'Shipped',
+                'delivered': 'Delivered',
+                'cancelled': 'Cancelled'
+            };
+            return statusMap[status] || status;
+        }
+        
+        function viewOrder(orderId) {
+            // In a real app, redirect to order details page
+            showAlert('Order details page coming soon', 'info');
+        }
+        
+        function removeFromWishlist(productId) {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            const updatedWishlist = wishlist.filter(item => item.id !== productId);
+            localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+            
+            showAlert('Item removed from wishlist', 'success');
+            loadDashboardData();
+        }
+        
+        function changePassword() {
+            // Redirect to profile page for password change
+            window.location.href = 'profile.html#password';
+        }
+        
+        function viewAddresses() {
+            showAlert('Address management coming soon', 'info');
+        }
+        
+        function contactSupport() {
+            window.location.href = 'mailto:support@electroshop.com';
+        }
+        
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            showAlert('Logged out successfully', 'success');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+        
+        function searchProducts() {
+            const searchInput = document.getElementById('searchInput');
+            const query = searchInput.value.trim();
+            if (query) {
+                window.location.href = `products.html?search=${encodeURIComponent(query)}`;
+            }
+        }
+        
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectroShop - Premium Electronics Marketplace</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading ElectroShop...</p>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <!-- Logo -->
+            <div class="nav-brand" onclick="window.location.href='index.html'">
+                <i class="fas fa-bolt"></i>
+                <h1>Electro<span>Shop</span></h1>
+            </div>
+
+            <!-- Search -->
+            <div class="nav-search">
+                <input type="text" id="searchInput" placeholder="Search for products...">
+                <button onclick="searchProducts()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <!-- Menu -->
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="active"><i class="fas fa-home"></i> Home</a>
+                <div class="dropdown">
+                    <a href="products.html"><i class="fas fa-shopping-bag"></i> Shop <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="products.html?category=phones"><i class="fas fa-mobile-alt"></i> Phones</a>
+                        <a href="products.html?category=laptops"><i class="fas fa-laptop"></i> Laptops</a>
+                        <a href="products.html?category=tablets"><i class="fas fa-tablet-alt"></i> Tablets</a>
+                        <a href="products.html?category=computers"><i class="fas fa-desktop"></i> Computers</a>
+                        <a href="products.html?category=accessories"><i class="fas fa-headphones"></i> Accessories</a>
+                    </div>
+                </div>
+                <a href="cart.html" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <div id="userMenu">
+                    <!-- Will be filled by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Discover Premium Electronics</h1>
+                <p>Shop the latest smartphones, laptops, tablets, and accessories at unbeatable prices with free shipping on orders over $99.</p>
+                <div class="hero-buttons">
+                    <a href="products.html" class="btn btn-primary">
+                        <i class="fas fa-shopping-cart"></i> Shop Now
+                    </a>
+                    <a href="#featured" class="btn btn-outline">
+                        <i class="fas fa-star"></i> Featured Products
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <h3>10,000+</h3>
+                        <p>Products</p>
+                    </div>
+                    <div class="stat">
+                        <h3>50,000+</h3>
+                        <p>Happy Customers</p>
+                    </div>
+                    <div class="stat">
+                        <h3>24/7</h3>
+                        <p>Support</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="images/hero-electronics.png" alt="Electronics Collection" onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&auto=format&fit=crop'">
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="section categories-section">
+        <div class="container">
+            <h2 class="section-title">Shop by Category</h2>
+            <p class="section-subtitle">Browse our wide range of electronics categories</p>
+            <div class="categories-grid" id="categoriesGrid">
+                <!-- Filled by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="section featured-section" id="featured">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Products</h2>
+                <a href="products.html?featured=true" class="btn-link">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="products-grid" id="featuredProducts">
+                <!-- Filled by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- New Arrivals -->
+    <section class="section new-arrivals">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">New Arrivals</h2>
+                <a href="products.html?sort=newest" class="btn-link">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="products-grid" id="newProducts">
+                <!-- Filled by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Banner -->
+    <section class="banner">
+        <div class="container">
+            <div class="banner-content">
+                <h2>Free Shipping on Orders Over $99</h2>
+                <p>No code needed. Free standard shipping on all orders over $99. Limited time offer.</p>
+                <a href="products.html" class="btn btn-white">
+                    <i class="fas fa-shopping-bag"></i> Start Shopping
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="section services">
+        <div class="container">
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3>Free Shipping</h3>
+                    <p>Free delivery on orders over $99</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Secure Payment</h3>
+                    <p>100% secure payment processing</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-undo-alt"></i>
+                    </div>
+                    <h3>30-Day Returns</h3>
+                    <p>Easy returns within 30 days</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>24/7 Support</h3>
+                    <p>Dedicated customer support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Electro<span>Shop</span></h3>
+                    </div>
+                    <p>Your trusted electronics marketplace since 2024. We offer premium products at competitive prices.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Shop</h4>
+                    <a href="products.html?category=phones">Smartphones</a>
+                    <a href="products.html?category=laptops">Laptops</a>
+                    <a href="products.html?category=tablets">Tablets</a>
+                    <a href="products.html?category=accessories">Accessories</a>
+                    <a href="products.html?category=computers">Computers</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="#">Help Center</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Shipping Info</a>
+                    <a href="#">Returns & Exchanges</a>
+                    <a href="#">Warranty</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="#">About Us</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="admin-login.html">Admin Panel</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Newsletter</h4>
+                    <p>Subscribe to get updates on new products and offers.</p>
+                    <div class="newsletter">
+                        <input type="email" id="newsletterEmail" placeholder="Your email">
+                        <button onclick="subscribeNewsletter()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ElectroShop. All rights reserved. | Designed with <i class="fas fa-heart"></i> for electronics lovers</p>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-amex"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                    <i class="fab fa-cc-apple-pay"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/products.js"></script>
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show loading
+            showLoading();
+            
+            // Load categories
+            loadCategories();
+            
+            // Load featured products
+            loadFeaturedProducts();
+            
+            // Load new arrivals
+            loadNewProducts();
+            
+            // Update user menu
+            updateUserMenu();
+            
+            // Update cart count
+            updateCartCount();
+            
+            // Hide loading after 1 second
+            setTimeout(hideLoading, 1000);
+        });
+        
+        async function loadCategories() {
+            try {
+                const categories = [
+                    { id: 'phones', name: 'Smartphones', icon: 'fas fa-mobile-alt', count: 156 },
+                    { id: 'laptops', name: 'Laptops', icon: 'fas fa-laptop', count: 89 },
+                    { id: 'tablets', name: 'Tablets', icon: 'fas fa-tablet-alt', count: 45 },
+                    { id: 'computers', name: 'Computers', icon: 'fas fa-desktop', count: 67 },
+                    { id: 'accessories', name: 'Accessories', icon: 'fas fa-headphones', count: 234 },
+                    { id: 'other', name: 'Other Electronics', icon: 'fas fa-gamepad', count: 112 }
+                ];
+                
+                const container = document.getElementById('categoriesGrid');
+                if (!container) return;
+                
+                container.innerHTML = categories.map(category => `
+                    <div class="category-card" onclick="window.location.href='products.html?category=${category.id}'">
+                        <div class="category-icon">
+                            <i class="${category.icon}"></i>
+                        </div>
+                        <h3>${category.name}</h3>
+                        <p>${category.count} products</p>
+                        <div class="category-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+        
+        async function loadFeaturedProducts() {
+            try {
+                const response = await fetch('http://localhost:5000/api/products/featured/random?limit=4');
+                const data = await response.json();
+                
+                if (data.success) {
+                    renderProducts(data.data, 'featuredProducts');
+                }
+            } catch (error) {
+                console.error('Error loading featured products:', error);
+                // Show fallback products
+                showFallbackProducts('featuredProducts');
+            }
+        }
+        
+        async function loadNewProducts() {
+            try {
+                const response = await fetch('http://localhost:5000/api/products?limit=4&sort=newest');
+                const data = await response.json();
+                
+                if (data.success) {
+                    renderProducts(data.data, 'newProducts');
+                }
+            } catch (error) {
+                console.error('Error loading new products:', error);
+                // Show fallback products
+                showFallbackProducts('newProducts');
+            }
+        }
+        
+        function renderProducts(products, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container || !products || products.length === 0) {
+                showFallbackProducts(containerId);
+                return;
+            }
+            
+            container.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-image" onclick="window.location.href='product-detail.html?id=${product._id}'">
+                        <img src="${product.images?.[0]?.url || 'images/placeholder.jpg'}" 
+                             alt="${product.name}"
+                             onerror="this.src='images/placeholder.jpg'">
+                        ${product.isFeatured ? '<span class="product-badge featured">Featured</span>' : ''}
+                        ${product.discountPrice ? `<span class="product-badge discount">-${Math.round((1 - product.discountPrice / product.price) * 100)}%</span>` : ''}
+                        <div class="product-overlay">
+                            <button class="btn-quick-view" onclick="quickView('${product._id}')">
+                                <i class="fas fa-eye"></i> Quick View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-category">${product.category}</div>
+                        <h3 class="product-title" onclick="window.location.href='product-detail.html?id=${product._id}'">
+                            ${product.name}
+                        </h3>
+                        <div class="product-rating">
+                            ${generateStars(product.rating?.average || 0)}
+                            <span class="rating-count">(${product.rating?.count || 0})</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">$${product.discountPrice || product.price}</span>
+                            ${product.discountPrice ? `<span class="old-price">$${product.price}</span>` : ''}
+                        </div>
+                        <div class="product-stock">
+                            <i class="fas ${product.isInStock ? 'fa-check-circle in-stock' : 'fa-times-circle out-of-stock'}"></i>
+                            ${product.isInStock ? 'In Stock' : 'Out of Stock'}
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn-add-cart" onclick="addToCart('${product._id}')" ${!product.isInStock ? 'disabled' : ''}>
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button class="btn-wishlist" onclick="toggleWishlist('${product._id}')">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function showFallbackProducts(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const fallbackProducts = [
+                {
+                    _id: '1',
+                    name: 'iPhone 14 Pro',
+                    category: 'phones',
+                    price: 999,
+                    discountPrice: 899,
+                    images: [{ url: 'images/placeholder.jpg' }],
+                    rating: { average: 4.8, count: 250 },
+                    isFeatured: true,
+                    isInStock: true
+                },
+                {
+                    _id: '2',
+                    name: 'MacBook Pro 16"',
+                    category: 'laptops',
+                    price: 2499,
+                    images: [{ url: 'images/placeholder.jpg' }],
+                    rating: { average: 4.9, count: 180 },
+                    isFeatured: true,
+                    isInStock: true
+                },
+                {
+                    _id: '3',
+                    name: 'Samsung Galaxy S23',
+                    category: 'phones',
+                    price: 799,
+                    discountPrice: 699,
+                    images: [{ url: 'images/placeholder.jpg' }],
+                    rating: { average: 4.7, count: 320 },
+                    isFeatured: true,
+                    isInStock: true
+                },
+                {
+                    _id: '4',
+                    name: 'AirPods Pro',
+                    category: 'accessories',
+                    price: 249,
+                    images: [{ url: 'images/placeholder.jpg' }],
+                    rating: { average: 4.8, count: 420 },
+                    isFeatured: true,
+                    isInStock: true
+                }
+            ];
+            
+            renderProducts(fallbackProducts, containerId);
+        }
+        
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+            
+            let stars = '';
+            for (let i = 0; i < fullStars; i++) stars += '<i class="fas fa-star"></i>';
+            if (halfStar) stars += '<i class="fas fa-star-half-alt"></i>';
+            for (let i = 0; i < emptyStars; i++) stars += '<i class="far fa-star"></i>';
+            return stars;
+        }
+        
+        function quickView(productId) {
+            window.location.href = `product-detail.html?id=${productId}`;
+        }
+        
+        function searchProducts() {
+            const searchInput = document.getElementById('searchInput');
+            const query = searchInput.value.trim();
+            if (query) {
+                window.location.href = `products.html?search=${encodeURIComponent(query)}`;
+            }
+        }
+        
+        function subscribeNewsletter() {
+            const emailInput = document.getElementById('newsletterEmail');
+            const email = emailInput.value.trim();
+            
+            if (!email) {
+                showAlert('Please enter your email address', 'warning');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showAlert('Please enter a valid email address', 'warning');
+                return;
+            }
+            
+            // Simulate subscription
+            showAlert(`Thank you for subscribing with ${email}!`, 'success');
+            emailInput.value = '';
+            
+            // In a real app, you would send this to your backend
+            console.log('Newsletter subscription:', email);
+        }
+        
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+    </script>
+</body>
+</html>

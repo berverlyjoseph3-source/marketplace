@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Electronics - ElectroShop</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+</head>
+<body>
+    <!-- Loading -->
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading Products...</p>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <!-- Logo -->
+            <div class="nav-brand" onclick="window.location.href='index.html'">
+                <i class="fas fa-bolt"></i>
+                <h1>Electro<span>Shop</span></h1>
+            </div>
+
+            <!-- Search -->
+            <div class="nav-search">
+                <input type="text" id="searchInput" placeholder="Search products..." value="${getUrlParam('search') || ''}">
+                <button onclick="searchProducts()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <!-- Menu -->
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <div class="dropdown">
+                    <a href="products.html" class="active"><i class="fas fa-shopping-bag"></i> Shop <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="products.html?category=phones"><i class="fas fa-mobile-alt"></i> Phones</a>
+                        <a href="products.html?category=laptops"><i class="fas fa-laptop"></i> Laptops</a>
+                        <a href="products.html?category=tablets"><i class="fas fa-tablet-alt"></i> Tablets</a>
+                        <a href="products.html?category=computers"><i class="fas fa-desktop"></i> Computers</a>
+                        <a href="products.html?category=accessories"><i class="fas fa-headphones"></i> Accessories</a>
+                    </div>
+                </div>
+                <a href="cart.html" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <div id="userMenu">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Shop Electronics</h1>
+            <p>Discover the latest gadgets and electronics at amazing prices</p>
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Shop</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="section products-page">
+        <div class="container">
+            <div class="products-layout">
+                <!-- Sidebar Filters -->
+                <aside class="products-sidebar">
+                    <div class="sidebar-widget">
+                        <h3>Categories</h3>
+                        <ul class="category-list" id="categoryList">
+                            <li><a href="products.html" class="${!getUrlParam('category') ? 'active' : ''}">All Categories</a></li>
+                            <li><a href="products.html?category=phones" class="${getUrlParam('category') === 'phones' ? 'active' : ''}">Smartphones</a></li>
+                            <li><a href="products.html?category=laptops" class="${getUrlParam('category') === 'laptops' ? 'active' : ''}">Laptops</a></li>
+                            <li><a href="products.html?category=tablets" class="${getUrlParam('category') === 'tablets' ? 'active' : ''}">Tablets</a></li>
+                            <li><a href="products.html?category=computers" class="${getUrlParam('category') === 'computers' ? 'active' : ''}">Computers</a></li>
+                            <li><a href="products.html?category=accessories" class="${getUrlParam('category') === 'accessories' ? 'active' : ''}">Accessories</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3>Price Range</h3>
+                        <div class="price-range">
+                            <input type="range" min="0" max="5000" value="5000" class="slider" id="priceRange">
+                            <div class="price-values">
+                                <span id="minPrice">$0</span>
+                                <span id="maxPrice">$5000</span>
+                            </div>
+                            <button class="btn btn-small" onclick="applyPriceFilter()">Apply</button>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3>Brands</h3>
+                        <div class="brand-filters" id="brandFilters">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3>Ratings</h3>
+                        <div class="rating-filters">
+                            <div class="rating-filter" onclick="filterByRating(5)">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span>& Up</span>
+                            </div>
+                            <div class="rating-filter" onclick="filterByRating(4)">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <span>& Up</span>
+                            </div>
+                            <div class="rating-filter" onclick="filterByRating(3)">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <span>& Up</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3>Availability</h3>
+                        <div class="availability-filter">
+                            <label class="checkbox">
+                                <input type="checkbox" id="inStockOnly" onchange="filterProducts()">
+                                <span>In Stock Only</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-block" onclick="clearFilters()">
+                        <i class="fas fa-times"></i> Clear All Filters
+                    </button>
+                </aside>
+
+                <!-- Products Grid -->
+                <main class="products-main">
+                    <!-- Products Header -->
+                    <div class="products-header">
+                        <div class="products-count">
+                            Showing <span id="productsCount">0</span> products
+                        </div>
+                        <div class="products-sort">
+                            <label>Sort by:</label>
+                            <select id="sortSelect" onchange="sortProducts()">
+                                <option value="newest">Newest</option>
+                                <option value="price_asc">Price: Low to High</option>
+                                <option value="price_desc">Price: High to Low</option>
+                                <option value="name">Name A-Z</option>
+                                <option value="popular">Most Popular</option>
+                            </select>
+                        </div>
+                        <div class="products-view">
+                            <button class="view-btn active" onclick="setViewMode('grid')">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="view-btn" onclick="setViewMode('list')">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid/List -->
+                    <div class="products-container" id="productsContainer">
+                        <div class="products-grid-view" id="productsGridView">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                        <div class="products-list-view" id="productsListView" style="display: none;">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- No Products Message -->
+                    <div class="no-products" id="noProducts" style="display: none;">
+                        <i class="fas fa-search"></i>
+                        <h3>No products found</h3>
+                        <p>Try adjusting your search or filter to find what you're looking for.</p>
+                        <button class="btn btn-primary" onclick="clearFilters()">
+                            <i class="fas fa-times"></i> Clear All Filters
+                        </button>
+                    </div>
+
+                    <!-- Loading Spinner -->
+                    <div class="products-loading" id="productsLoading">
+                        <div class="spinner"></div>
+                        <p>Loading products...</p>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination" id="pagination">
+                        <!-- Filled by JavaScript -->
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Stay Updated</h2>
+                <p>Subscribe to our newsletter for the latest deals and product updates</p>
+                <div class="newsletter-form">
+                    <input type="email" id="newsletterEmail2" placeholder="Enter your email">
+                    <button class="btn btn-primary" onclick="subscribeNewsletter2()">
+                        Subscribe <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Electro<span>Shop</span></h3>
+                    </div>
+                    <p>Your trusted electronics marketplace since 2024.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="products.html">Shop</a>
+                    <a href="cart.html">Cart</a>
+                    <a href="dashboard.html">My Account</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="#">Contact Us</a>
+                    <a href="#">FAQs</a>
+                    <a href="#">Shipping</a>
+                    <a href="#">Returns</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Tech Street, San Francisco, CA</p>
+                    <p><i class="fas fa-phone"></i> (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> support@electroshop.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ElectroShop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/products.js"></script>
+    <script>
+        // Global variables
+        let currentPage = 1;
+        let totalPages = 1;
+        let currentViewMode = 'grid';
+        let currentFilters = {
+            category: null,
+            minPrice: 0,
+            maxPrice: 5000,
+            brand: null,
+            rating: null,
+            inStockOnly: false,
+            search: null,
+            sort: 'newest'
+        };
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            showLoading();
+            
+            // Parse URL parameters
+            parseUrlParams();
+            
+            // Initialize filters from URL
+            initializeFilters();
+            
+            // Load brands
+            loadBrands();
+            
+            // Load products
+            loadProducts();
+            
+            // Update user menu
+            updateUserMenu();
+            
+            // Update cart count
+            updateCartCount();
+            
+            // Setup price range slider
+            setupPriceSlider();
+            
+            setTimeout(hideLoading, 500);
+        });
+
+        function getUrlParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function parseUrlParams() {
+            currentFilters.category = getUrlParam('category');
+            currentFilters.search = getUrlParam('search');
+            currentFilters.sort = getUrlParam('sort') || 'newest';
+            
+            // Update sort select
+            const sortSelect = document.getElementById('sortSelect');
+            if (sortSelect) {
+                sortSelect.value = currentFilters.sort;
+            }
+            
+            // Update category active state
+            document.querySelectorAll('.category-list a').forEach(link => {
+                link.classList.remove('active');
+                const category = link.getAttribute('href').split('=')[1];
+                if (currentFilters.category === category || 
+                    (!currentFilters.category && link.href.includes('products.html') && !link.href.includes('category='))) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        function initializeFilters() {
+            const inStockOnly = document.getElementById('inStockOnly');
+            if (inStockOnly) {
+                inStockOnly.checked = currentFilters.inStockOnly;
+            }
+        }
+
+        function setupPriceSlider() {
+            const priceSlider = document.getElementById('priceRange');
+            const minPrice = document.getElementById('minPrice');
+            const maxPrice = document.getElementById('maxPrice');
+            
+            if (priceSlider && minPrice && maxPrice) {
+                priceSlider.addEventListener('input', function() {
+                    maxPrice.textContent = '$' + this.value;
+                });
+                
+                // Set initial values
+                maxPrice.textContent = '$' + priceSlider.value;
+            }
+        }
+
+        function loadBrands() {
+            const brands = ['Apple', 'Samsung', 'Dell', 'HP', 'Lenovo', 'Sony', 'Microsoft', 'Google', 'LG', 'Asus'];
+            const container = document.getElementById('brandFilters');
+            
+            if (container) {
+                container.innerHTML = brands.map(brand => `
+                    <label class="checkbox">
+                        <input type="checkbox" value="${brand}" onchange="filterByBrand('${brand}', this.checked)">
+                        <span>${brand}</span>
+                    </label>
+                `).join('');
+            }
+        }
+
+        async function loadProducts() {
+            try {
+                showProductsLoading();
+                
+                // Build query string
+                let query = `?page=${currentPage}&limit=12`;
+                
+                if (currentFilters.category) query += `&category=${currentFilters.category}`;
+                if (currentFilters.search) query += `&search=${currentFilters.search}`;
+                if (currentFilters.minPrice > 0) query += `&minPrice=${currentFilters.minPrice}`;
+                if (currentFilters.maxPrice < 5000) query += `&maxPrice=${currentFilters.maxPrice}`;
+                if (currentFilters.sort) query += `&sort=${currentFilters.sort}`;
+                if (currentFilters.inStockOnly) query += `&inStockOnly=true`;
+                
+                const response = await fetch(`http://localhost:5000/api/products${query}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayProducts(data.data);
+                    updatePagination(data.pagination);
+                    updateProductsCount(data.pagination.total);
+                    
+                    if (data.data.length === 0) {
+                        showNoProducts();
+                    } else {
+                        hideNoProducts();
+                    }
+                } else {
+                    showNoProducts();
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+                showNoProducts();
+                showAlert('Failed to load products. Please try again.', 'error');
+            } finally {
+                hideProductsLoading();
+            }
+        }
+
+        function displayProducts(products) {
+            const gridView = document.getElementById('productsGridView');
+            const listView = document.getElementById('productsListView');
+            
+            if (!gridView || !listView) return;
+            
+            if (products.length === 0) {
+                gridView.innerHTML = '';
+                listView.innerHTML = '';
+                return;
+            }
+            
+            // Grid View
+            gridView.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-image" onclick="window.location.href='product-detail.html?id=${product._id}'">
+                        <img src="${product.images?.[0]?.url || 'images/placeholder.jpg'}" 
+                             alt="${product.name}"
+                             onerror="this.src='images/placeholder.jpg'">
+                        ${product.isFeatured ? '<span class="product-badge featured">Featured</span>' : ''}
+                        ${product.discountPrice ? `<span class="product-badge discount">-${Math.round((1 - product.discountPrice / product.price) * 100)}%</span>` : ''}
+                        <div class="product-overlay">
+                            <button class="btn-quick-view" onclick="quickView('${product._id}')">
+                                <i class="fas fa-eye"></i> Quick View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-category">${product.category}</div>
+                        <h3 class="product-title" onclick="window.location.href='product-detail.html?id=${product._id}'">
+                            ${product.name}
+                        </h3>
+                        <div class="product-rating">
+                            ${generateStars(product.rating?.average || 0)}
+                            <span class="rating-count">(${product.rating?.count || 0})</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">$${product.discountPrice || product.price}</span>
+                            ${product.discountPrice ? `<span class="old-price">$${product.price}</span>` : ''}
+                        </div>
+                        <div class="product-stock">
+                            <i class="fas ${product.isInStock ? 'fa-check-circle in-stock' : 'fa-times-circle out-of-stock'}"></i>
+                            ${product.isInStock ? 'In Stock' : 'Out of Stock'}
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn-add-cart" onclick="addToCart('${product._id}')" ${!product.isInStock ? 'disabled' : ''}>
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button class="btn-wishlist" onclick="toggleWishlist('${product._id}')">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // List View
+            listView.innerHTML = products.map(product => `
+                <div class="product-list-item">
+                    <div class="product-list-image" onclick="window.location.href='product-detail.html?id=${product._id}'">
+                        <img src="${product.images?.[0]?.url || 'images/placeholder.jpg'}" 
+                             alt="${product.name}"
+                             onerror="this.src='images/placeholder.jpg'">
+                        ${product.isFeatured ? '<span class="product-badge featured">Featured</span>' : ''}
+                    </div>
+                    <div class="product-list-content">
+                        <div class="product-list-header">
+                            <h3 onclick="window.location.href='product-detail.html?id=${product._id}'">${product.name}</h3>
+                            <div class="product-price">
+                                <span class="current-price">$${product.discountPrice || product.price}</span>
+                                ${product.discountPrice ? `<span class="old-price">$${product.price}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="product-list-details">
+                            <div class="product-category">${product.category} • ${product.brand}</div>
+                            <div class="product-rating">
+                                ${generateStars(product.rating?.average || 0)}
+                                <span class="rating-count">(${product.rating?.count || 0} reviews)</span>
+                            </div>
+                            <p class="product-description">${product.shortDescription || product.description.substring(0, 150)}...</p>
+                            <div class="product-specs">
+                                ${product.specifications?.slice(0, 3).map(spec => `
+                                    <span class="spec-tag">${spec.key}: ${spec.value}</span>
+                                `).join('') || ''}
+                            </div>
+                        </div>
+                        <div class="product-list-actions">
+                            <button class="btn-add-cart" onclick="addToCart('${product._id}')" ${!product.isInStock ? 'disabled' : ''}>
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button class="btn-wishlist" onclick="toggleWishlist('${product._id}')">
+                                <i class="far fa-heart"></i> Wishlist
+                            </button>
+                            <button class="btn-quick-view" onclick="quickView('${product._id}')">
+                                <i class="fas fa-eye"></i> Quick View
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+            
+            let stars = '';
+            for (let i = 0; i < fullStars; i++) stars += '<i class="fas fa-star"></i>';
+            if (halfStar) stars += '<i class="fas fa-star-half-alt"></i>';
+            for (let i = 0; i < emptyStars; i++) stars += '<i class="far fa-star"></i>';
+            return stars;
+        }
+
+        function updatePagination(pagination) {
+            const container = document.getElementById('pagination');
+            if (!container || !pagination) return;
+            
+            totalPages = pagination.pages;
+            
+            let paginationHtml = '';
+            
+            // Previous button
+            paginationHtml += `
+                <button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                        onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+            `;
+            
+            // Page numbers
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHtml += `
+                    <button class="pagination-btn ${i === currentPage ? 'active' : ''}" 
+                            onclick="changePage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+            
+            // Next button
+            paginationHtml += `
+                <button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                        onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+            
+            container.innerHTML = paginationHtml;
+        }
+
+        function changePage(page) {
+            if (page < 1 || page > totalPages || page === currentPage) return;
+            
+            currentPage = page;
+            loadProducts();
+            
+            // Scroll to top of products
+            const productsSection = document.querySelector('.products-main');
+            if (productsSection) {
+                productsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function updateProductsCount(count) {
+            const counter = document.getElementById('productsCount');
+            if (counter) {
+                counter.textContent = count;
+            }
+        }
+
+        function showProductsLoading() {
+            const loading = document.getElementById('productsLoading');
+            if (loading) {
+                loading.style.display = 'flex';
+            }
+        }
+
+        function hideProductsLoading() {
+            const loading = document.getElementById('productsLoading');
+            if (loading) {
+                loading.style.display = 'none';
+            }
+        }
+
+        function showNoProducts() {
+            const noProducts = document.getElementById('noProducts');
+            if (noProducts) {
+                noProducts.style.display = 'block';
+            }
+        }
+
+        function hideNoProducts() {
+            const noProducts = document.getElementById('noProducts');
+            if (noProducts) {
+                noProducts.style.display = 'none';
+            }
+        }
+
+        // Filter Functions
+        function applyPriceFilter() {
+            const priceSlider = document.getElementById('priceRange');
+            if (priceSlider) {
+                currentFilters.maxPrice = parseInt(priceSlider.value);
+                currentPage = 1;
+                loadProducts();
+            }
+        }
+
+        function filterByBrand(brand, checked) {
+            currentFilters.brand = checked ? brand : null;
+            currentPage = 1;
+            loadProducts();
+        }
+
+        function filterByRating(rating) {
+            currentFilters.rating = currentFilters.rating === rating ? null : rating;
+            currentPage = 1;
+            loadProducts();
+        }
+
+        function filterProducts() {
+            const inStockOnly = document.getElementById('inStockOnly');
+            if (inStockOnly) {
+                currentFilters.inStockOnly = inStockOnly.checked;
+                currentPage = 1;
+                loadProducts();
+            }
+        }
+
+        function sortProducts() {
+            const sortSelect = document.getElementById('sortSelect');
+            if (sortSelect) {
+                currentFilters.sort = sortSelect.value;
+                currentPage = 1;
+                loadProducts();
+            }
+        }
+
+        function clearFilters() {
+            // Reset all filters
+            currentFilters = {
+                category: null,
+                minPrice: 0,
+                maxPrice: 5000,
+                brand: null,
+                rating: null,
+                inStockOnly: false,
+                search: null,
+                sort: 'newest'
+            };
+            
+            // Reset UI
+            const priceSlider = document.getElementById('priceRange');
+            if (priceSlider) {
+                priceSlider.value = 5000;
+                document.getElementById('maxPrice').textContent = '$5000';
+            }
+            
+            const inStockOnly = document.getElementById('inStockOnly');
+            if (inStockOnly) {
+                inStockOnly.checked = false;
+            }
+            
+            const sortSelect = document.getElementById('sortSelect');
+            if (sortSelect) {
+                sortSelect.value = 'newest';
+            }
+            
+            // Reset checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Reset active category
+            document.querySelectorAll('.category-list a').forEach(link => {
+                link.classList.remove('active');
+                if (!link.href.includes('category=')) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Reload products
+            currentPage = 1;
+            loadProducts();
+            
+            // Update URL
+            window.history.pushState({}, '', 'products.html');
+        }
+
+        function setViewMode(mode) {
+            currentViewMode = mode;
+            
+            const gridView = document.getElementById('productsGridView');
+            const listView = document.getElementById('productsListView');
+            const gridBtn = document.querySelector('.view-btn:nth-child(1)');
+            const listBtn = document.querySelector('.view-btn:nth-child(2)');
+            
+            if (mode === 'grid') {
+                if (gridView) gridView.style.display = 'grid';
+                if (listView) listView.style.display = 'none';
+                if (gridBtn) gridBtn.classList.add('active');
+                if (listBtn) listBtn.classList.remove('active');
+            } else {
+                if (gridView) gridView.style.display = 'none';
+                if (listView) listView.style.display = 'block';
+                if (gridBtn) gridBtn.classList.remove('active');
+                if (listBtn) listBtn.classList.add('active');
+            }
+        }
+
+        function searchProducts() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                const query = searchInput.value.trim();
+                if (query) {
+                    window.location.href = `products.html?search=${encodeURIComponent(query)}`;
+                } else {
+                    window.location.href = 'products.html';
+                }
+            }
+        }
+
+        function quickView(productId) {
+            // For now, redirect to product detail page
+            window.location.href = `product-detail.html?id=${productId}`;
+        }
+
+        function subscribeNewsletter2() {
+            const emailInput = document.getElementById('newsletterEmail2');
+            const email = emailInput.value.trim();
+            
+            if (!email) {
+                showAlert('Please enter your email address', 'warning');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showAlert('Please enter a valid email address', 'warning');
+                return;
+            }
+            
+            showAlert(`Thank you for subscribing with ${email}!`, 'success');
+            emailInput.value = '';
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+    </script>
+</body>
+</html>

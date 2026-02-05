@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - ElectroShop</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+</head>
+<body>
+    <!-- Loading -->
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading Checkout...</p>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand" onclick="window.location.href='index.html'">
+                <i class="fas fa-bolt"></i>
+                <h1>Electro<span>Shop</span></h1>
+            </div>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="products.html"><i class="fas fa-shopping-bag"></i> Shop</a>
+                <a href="cart.html" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <div id="userMenu">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Checkout Section -->
+    <section class="section checkout-section">
+        <div class="container">
+            <div class="page-header">
+                <h1>Checkout</h1>
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <a href="cart.html">Cart</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Checkout</span>
+                </div>
+            </div>
+
+            <div class="checkout-layout">
+                <!-- Left Column: Forms -->
+                <div class="checkout-forms">
+                    <!-- Contact Information -->
+                    <div class="checkout-form-section">
+                        <h2><i class="fas fa-user"></i> Contact Information</h2>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="checkoutEmail">Email Address *</label>
+                                <input type="email" id="checkoutEmail" placeholder="your@email.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkoutPhone">Phone Number *</label>
+                                <input type="tel" id="checkoutPhone" placeholder="(555) 123-4567" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Address -->
+                    <div class="checkout-form-section">
+                        <h2><i class="fas fa-truck"></i> Shipping Address</h2>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="shippingFirstName">First Name *</label>
+                                <input type="text" id="shippingFirstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="shippingLastName">Last Name *</label>
+                                <input type="text" id="shippingLastName" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="shippingStreet">Street Address *</label>
+                            <input type="text" id="shippingStreet" placeholder="123 Main St" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="shippingCity">City *</label>
+                                <input type="text" id="shippingCity" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="shippingState">State *</label>
+                                <select id="shippingState" required>
+                                    <option value="">Select State</option>
+                                    <option value="AL">Alabama</option>
+                                    <option value="AK">Alaska</option>
+                                    <option value="AZ">Arizona</option>
+                                    <option value="AR">Arkansas</option>
+                                    <option value="CA">California</option>
+                                    <option value="CO">Colorado</option>
+                                    <option value="CT">Connecticut</option>
+                                    <option value="DE">Delaware</option>
+                                    <option value="FL">Florida</option>
+                                    <option value="GA">Georgia</option>
+                                    <option value="HI">Hawaii</option>
+                                    <option value="ID">Idaho</option>
+                                    <option value="IL">Illinois</option>
+                                    <option value="IN">Indiana</option>
+                                    <option value="IA">Iowa</option>
+                                    <option value="KS">Kansas</option>
+                                    <option value="KY">Kentucky</option>
+                                    <option value="LA">Louisiana</option>
+                                    <option value="ME">Maine</option>
+                                    <option value="MD">Maryland</option>
+                                    <option value="MA">Massachusetts</option>
+                                    <option value="MI">Michigan</option>
+                                    <option value="MN">Minnesota</option>
+                                    <option value="MS">Mississippi</option>
+                                    <option value="MO">Missouri</option>
+                                    <option value="MT">Montana</option>
+                                    <option value="NE">Nebraska</option>
+                                    <option value="NV">Nevada</option>
+                                    <option value="NH">New Hampshire</option>
+                                    <option value="NJ">New Jersey</option>
+                                    <option value="NM">New Mexico</option>
+                                    <option value="NY">New York</option>
+                                    <option value="NC">North Carolina</option>
+                                    <option value="ND">North Dakota</option>
+                                    <option value="OH">Ohio</option>
+                                    <option value="OK">Oklahoma</option>
+                                    <option value="OR">Oregon</option>
+                                    <option value="PA">Pennsylvania</option>
+                                    <option value="RI">Rhode Island</option>
+                                    <option value="SC">South Carolina</option>
+                                    <option value="SD">South Dakota</option>
+                                    <option value="TN">Tennessee</option>
+                                    <option value="TX">Texas</option>
+                                    <option value="UT">Utah</option>
+                                    <option value="VT">Vermont</option>
+                                    <option value="VA">Virginia</option>
+                                    <option value="WA">Washington</option>
+                                    <option value="WV">West Virginia</option>
+                                    <option value="WI">Wisconsin</option>
+                                    <option value="WY">Wyoming</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="shippingZip">ZIP Code *</label>
+                                <input type="text" id="shippingZip" pattern="[0-9]{5}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Method -->
+                    <div class="checkout-form-section">
+                        <h2><i class="fas fa-shipping-fast"></i> Shipping Method</h2>
+                        <div class="shipping-options" id="shippingOptions">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Billing Address -->
+                    <div class="checkout-form-section">
+                        <h2><i class="fas fa-file-invoice-dollar"></i> Billing Address</h2>
+                        <div class="checkbox">
+                            <input type="checkbox" id="sameAsBilling" checked>
+                            <label for="sameAsBilling">Same as shipping address</label>
+                        </div>
+                        <div id="billingForm" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="billingFirstName">First Name</label>
+                                    <input type="text" id="billingFirstName">
+                                </div>
+                                <div class="form-group">
+                                    <label for="billingLastName">Last Name</label>
+                                    <input type="text" id="billingLastName">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="billingStreet">Street Address</label>
+                                <input type="text" id="billingStreet" placeholder="123 Main St">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="billingCity">City</label>
+                                    <input type="text" id="billingCity">
+                                </div>
+                                <div class="form-group">
+                                    <label for="billingState">State</label>
+                                    <select id="billingState">
+                                        <option value="">Select State</option>
+                                        <!-- Same states as shipping -->
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billingZip">ZIP Code</label>
+                                    <input type="text" id="billingZip" pattern="[0-9]{5}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="checkout-form-section">
+                        <h2><i class="fas fa-credit-card"></i> Payment Method</h2>
+                        <div class="payment-methods" id="paymentMethods">
+                            <!-- Filled by JavaScript -->
+                        </div>
+
+                        <!-- Credit Card Form -->
+                        <div class="payment-form" id="credit_card_form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="cardNumber">Card Number *</label>
+                                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="expiryDate">Expiry Date *</label>
+                                    <input type="text" id="expiryDate" placeholder="MM/YY">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv">CVV *</label>
+                                    <input type="text" id="cvv" placeholder="123">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="cardName">Cardholder Name *</label>
+                                <input type="text" id="cardName" placeholder="John Doe">
+                            </div>
+                        </div>
+
+                        <!-- PayPal Form -->
+                        <div class="payment-form" id="paypal_form" style="display: none;">
+                            <div class="paypal-info">
+                                <p>You will be redirected to PayPal to complete your payment.</p>
+                                <div class="paypal-logo">
+                                    <i class="fab fa-paypal"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Apple Pay Form -->
+                        <div class="payment-form" id="apple_pay_form" style="display: none;">
+                            <div class="apple-pay-info">
+                                <p>Click the button below to pay with Apple Pay.</p>
+                                <button class="apple-pay-btn">
+                                    <i class="fab fa-apple"></i> Pay with Apple Pay
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Notes -->
+                    <div class="checkout-form-section">
+                        <h2><i class="fas fa-sticky-note"></i> Order Notes</h2>
+                        <div class="form-group">
+                            <label for="orderNotes">Special instructions for your order (optional)</label>
+                            <textarea id="orderNotes" rows="3" placeholder="Delivery instructions, gift wrapping requests, etc."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Order Summary -->
+                <div class="checkout-summary">
+                    <div class="summary-card">
+                        <h2>Order Summary</h2>
+                        
+                        <!-- Cart Items -->
+                        <div class="cart-items-preview">
+                            <h3>Items (<span id="itemCount">0</span>)</h3>
+                            <div class="items-list" id="checkoutItems">
+                                <!-- Filled by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Order Totals -->
+                        <div class="order-totals" id="orderSummary">
+                            <!-- Filled by JavaScript -->
+                        </div>
+
+                        <!-- Coupon Code -->
+                        <div class="coupon-section">
+                            <input type="text" id="couponCode" placeholder="Coupon code">
+                            <button class="btn btn-outline" id="applyCouponBtn">Apply</button>
+                        </div>
+
+                        <!-- Secure Checkout -->
+                        <div class="secure-checkout">
+                            <i class="fas fa-shield-alt"></i>
+                            <div>
+                                <h4>Secure Checkout</h4>
+                                <p>Your payment information is encrypted and secure.</p>
+                            </div>
+                        </div>
+
+                        <!-- Place Order Button -->
+                        <button class="btn btn-primary btn-place-order" id="placeOrderBtn">
+                            <i class="fas fa-lock"></i> Place Order
+                        </button>
+
+                        <!-- Return to Cart -->
+                        <button class="btn btn-outline btn-edit-cart" id="editCartBtn">
+                            <i class="fas fa-edit"></i> Edit Cart
+                        </button>
+
+                        <!-- Guarantees -->
+                        <div class="checkout-guarantees">
+                            <div class="guarantee">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>30-Day Returns</span>
+                            </div>
+                            <div class="guarantee">
+                                <i class="fas fa-truck"></i>
+                                <span>Free Shipping Over $99</span>
+                            </div>
+                            <div class="guarantee">
+                                <i class="fas fa-headset"></i>
+                                <span>24/7 Support</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Electro<span>Shop</span></h3>
+                    </div>
+                    <p>Secure checkout guaranteed.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Need Help?</h4>
+                    <a href="#">Contact Support</a>
+                    <a href="#">FAQs</a>
+                    <a href="#">Shipping Info</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Secure Payment</h4>
+                    <div class="payment-icons">
+                        <i class="fab fa-cc-visa"></i>
+                        <i class="fab fa-cc-mastercard"></i>
+                        <i class="fab fa-cc-amex"></i>
+                        <i class="fab fa-cc-paypal"></i>
+                        <i class="fab fa-cc-apple-pay"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ElectroShop. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/checkout.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showLoading();
+            
+            // Initialize checkout
+            checkout.loadCheckoutData();
+            
+            // Update user menu
+            auth.updateUserMenu();
+            
+            // Update cart count
+            const cart = JSON.parse(localStorage.getItem('shopping_cart') || '[]');
+            const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = itemCount;
+            document.getElementById('itemCount').textContent = cart.length;
+            
+            setTimeout(hideLoading, 1000);
+        });
+    </script>
+</body>
+</html>

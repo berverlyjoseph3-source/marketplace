@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - ElectroShop</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+</head>
+<body>
+    <!-- Loading -->
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading Cart...</p>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand" onclick="window.location.href='index.html'">
+                <i class="fas fa-bolt"></i>
+                <h1>Electro<span>Shop</span></h1>
+            </div>
+
+            <div class="nav-search">
+                <input type="text" id="searchInput" placeholder="Search products...">
+                <button onclick="searchProducts()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="products.html"><i class="fas fa-shopping-bag"></i> Shop</a>
+                <a href="cart.html" class="cart-icon active">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <div id="userMenu">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Cart Section -->
+    <section class="section cart-section">
+        <div class="container">
+            <div class="page-header">
+                <h1>Shopping Cart</h1>
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Cart</span>
+                </div>
+            </div>
+
+            <div class="cart-layout">
+                <!-- Cart Items -->
+                <div class="cart-items" id="cartItems">
+                    <div class="cart-header">
+                        <h2>Your Items (<span id="itemCount">0</span>)</h2>
+                        <button class="btn-clear" onclick="clearCart()">
+                            <i class="fas fa-trash"></i> Clear Cart
+                        </button>
+                    </div>
+                    
+                    <!-- Cart items will be loaded here -->
+                    <div class="empty-cart" id="emptyCart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3>Your cart is empty</h3>
+                        <p>Looks like you haven't added any items to your cart yet.</p>
+                        <a href="products.html" class="btn btn-primary">
+                            <i class="fas fa-shopping-bag"></i> Start Shopping
+                        </a>
+                    </div>
+                    
+                    <div class="cart-items-list" id="cartItemsList">
+                        <!-- Cart items loaded by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <h2>Order Summary</h2>
+                    <div class="summary-details">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping</span>
+                            <span id="shipping">$9.99</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Tax</span>
+                            <span id="tax">$0.00</span>
+                        </div>
+                        <div class="summary-row discount-row">
+                            <span>Discount</span>
+                            <span id="discount">-$0.00</span>
+                        </div>
+                        <div class="summary-row total-row">
+                            <span>Total</span>
+                            <span id="total">$0.00</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Coupon Code -->
+                    <div class="coupon-section">
+                        <input type="text" id="couponCode" placeholder="Enter coupon code">
+                        <button class="btn btn-outline" onclick="applyCoupon()">Apply</button>
+                    </div>
+                    
+                    <!-- Checkout Button -->
+                    <button class="btn btn-primary btn-checkout" onclick="proceedToCheckout()" disabled>
+                        <i class="fas fa-lock"></i> Proceed to Checkout
+                    </button>
+                    
+                    <!-- Continue Shopping -->
+                    <a href="products.html" class="btn-continue">
+                        <i class="fas fa-arrow-left"></i> Continue Shopping
+                    </a>
+                    
+                    <!-- Secure Payment -->
+                    <div class="secure-payment">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure SSL Encryption • 100% Safe & Secure</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recently Viewed -->
+            <div class="recently-viewed" id="recentlyViewed">
+                <h3>Recently Viewed</h3>
+                <div class="products-grid" id="recentProducts">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Electro<span>Shop</span></h3>
+                    </div>
+                    <p>Premium electronics marketplace.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="products.html">Shop</a>
+                    <a href="cart.html">Cart</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="#">Contact</a>
+                    <a href="#">FAQs</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ElectroShop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        let cartItems = [];
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            showLoading();
+            loadCart();
+            updateUserMenu();
+            setTimeout(hideLoading, 800);
+        });
+        
+        function loadCart() {
+            // Get cart from localStorage
+            const savedCart = localStorage.getItem('cart');
+            cartItems = savedCart ? JSON.parse(savedCart) : [];
+            
+            // Update cart count
+            updateCartCount();
+            
+            // Render cart items
+            renderCartItems();
+            
+            // Update order summary
+            updateOrderSummary();
+            
+            // Load recently viewed
+            loadRecentlyViewed();
+        }
+        
+        function renderCartItems() {
+            const cartItemsList = document.getElementById('cartItemsList');
+            const emptyCart = document.getElementById('emptyCart');
+            const itemCount = document.getElementById('itemCount');
+            
+            if (!cartItemsList || !emptyCart || !itemCount) return;
+            
+            if (cartItems.length === 0) {
+                cartItemsList.style.display = 'none';
+                emptyCart.style.display = 'block';
+                itemCount.textContent = '0';
+                return;
+            }
+            
+            emptyCart.style.display = 'none';
+            cartItemsList.style.display = 'block';
+            itemCount.textContent = cartItems.length;
+            
+            // Render cart items
+            cartItemsList.innerHTML = cartItems.map((item, index) => `
+                <div class="cart-item" id="cartItem-${index}">
+                    <div class="cart-item-image">
+                        <img src="${item.image || 'images/placeholder.jpg'}" 
+                             alt="${item.name}"
+                             onerror="this.src='images/placeholder.jpg'">
+                    </div>
+                    <div class="cart-item-details">
+                        <h3 onclick="window.location.href='product-detail.html?id=${item.id}'">
+                            ${item.name}
+                        </h3>
+                        <div class="cart-item-meta">
+                            <span class="brand">${item.brand || 'ElectroShop'}</span>
+                            <span class="model">${item.model || ''}</span>
+                        </div>
+                        <div class="cart-item-price">
+                            <span class="current-price">$${(item.price * item.quantity).toFixed(2)}</span>
+                            ${item.originalPrice ? `<span class="original-price">$${(item.originalPrice * item.quantity).toFixed(2)}</span>` : ''}
+                        </div>
+                        <div class="cart-item-actions">
+                            <button class="btn-remove" onclick="removeFromCart(${index})">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
+                            <button class="btn-wishlist" onclick="moveToWishlist(${index})">
+                                <i class="far fa-heart"></i> Save for Later
+                            </button>
+                        </div>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <button class="qty-btn" onclick="updateQuantity(${index}, -1)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="number" 
+                               value="${item.quantity}" 
+                               min="1" 
+                               max="${item.maxStock || 10}"
+                               onchange="updateQuantityInput(${index}, this.value)">
+                        <button class="qty-btn" onclick="updateQuantity(${index}, 1)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Enable/disable checkout button
+            const checkoutBtn = document.querySelector('.btn-checkout');
+            if (checkoutBtn) {
+                checkoutBtn.disabled = cartItems.length === 0;
+            }
+        }
+        
+        function updateQuantity(index, change) {
+            if (cartItems[index]) {
+                const newQuantity = cartItems[index].quantity + change;
+                
+                if (newQuantity < 1) {
+                    removeFromCart(index);
+                    return;
+                }
+                
+                if (newQuantity > (cartItems[index].maxStock || 10)) {
+                    showAlert(`Maximum ${cartItems[index].maxStock || 10} units available`, 'warning');
+                    return;
+                }
+                
+                cartItems[index].quantity = newQuantity;
+                saveCart();
+                renderCartItems();
+                updateOrderSummary();
+                
+                // Update the specific item in the UI
+                const quantityInput = document.querySelector(`#cartItem-${index} input[type="number"]`);
+                if (quantityInput) {
+                    quantityInput.value = newQuantity;
+                }
+            }
+        }
+        
+        function updateQuantityInput(index, value) {
+            const quantity = parseInt(value);
+            if (isNaN(quantity) || quantity < 1) {
+                removeFromCart(index);
+                return;
+            }
+            
+            if (quantity > (cartItems[index].maxStock || 10)) {
+                showAlert(`Maximum ${cartItems[index].maxStock || 10} units available`, 'warning');
+                return;
+            }
+            
+            cartItems[index].quantity = quantity;
+            saveCart();
+            updateOrderSummary();
+        }
+        
+        function removeFromCart(index) {
+            if (cartItems[index]) {
+                const removedItem = cartItems.splice(index, 1)[0];
+                saveCart();
+                renderCartItems();
+                updateOrderSummary();
+                showAlert(`Removed ${removedItem.name} from cart`, 'info');
+            }
+        }
+        
+        function moveToWishlist(index) {
+            if (cartItems[index]) {
+                const item = cartItems[index];
+                
+                // Get existing wishlist
+                const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+                
+                // Check if item already in wishlist
+                const exists = wishlist.some(w => w.id === item.id);
+                if (!exists) {
+                    wishlist.push({
+                        id: item.id,
+                        name: item.name,
+                        price: item.price,
+                        image: item.image
+                    });
+                    
+                    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                    
+                    // Remove from cart
+                    removeFromCart(index);
+                    
+                    showAlert('Item moved to wishlist', 'success');
+                } else {
+                    showAlert('Item already in wishlist', 'info');
+                }
+            }
+        }
+        
+        function clearCart() {
+            if (cartItems.length === 0) {
+                showAlert('Cart is already empty', 'info');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to clear your cart?')) {
+                cartItems = [];
+                saveCart();
+                renderCartItems();
+                updateOrderSummary();
+                showAlert('Cart cleared successfully', 'success');
+            }
+        }
+        
+        function updateOrderSummary() {
+            // Calculate subtotal
+            const subtotal = cartItems.reduce((sum, item) => {
+                return sum + (item.price * item.quantity);
+            }, 0);
+            
+            // Calculate shipping (free over $99)
+            const shipping = subtotal >= 99 ? 0 : 9.99;
+            
+            // Calculate tax (10%)
+            const tax = subtotal * 0.1;
+            
+            // Get discount from coupon
+            const discount = getCouponDiscount(subtotal);
+            
+            // Calculate total
+            const total = subtotal + shipping + tax - discount;
+            
+            // Update UI
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('shipping').textContent = shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`;
+            document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('discount').textContent = `-$${discount.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+            
+            // Update shipping display class
+            const shippingEl = document.getElementById('shipping');
+            if (shippingEl) {
+                shippingEl.className = shipping === 0 ? 'free-shipping' : '';
+            }
+        }
+        
+        function getCouponDiscount(subtotal) {
+            const coupon = localStorage.getItem('activeCoupon');
+            if (!coupon) return 0;
+            
+            const couponData = JSON.parse(coupon);
+            if (couponData.type === 'percentage') {
+                return subtotal * (couponData.value / 100);
+            } else if (couponData.type === 'fixed') {
+                return couponData.value;
+            }
+            return 0;
+        }
+        
+        function applyCoupon() {
+            const couponInput = document.getElementById('couponCode');
+            const couponCode = couponInput.value.trim().toUpperCase();
+            
+            if (!couponCode) {
+                showAlert('Please enter a coupon code', 'warning');
+                return;
+            }
+            
+            // Mock coupon validation
+            const validCoupons = {
+                'WELCOME10': { type: 'percentage', value: 10, minOrder: 0 },
+                'SAVE20': { type: 'fixed', value: 20, minOrder: 100 },
+                'FREESHIP': { type: 'shipping', value: 9.99, minOrder: 50 }
+            };
+            
+            if (validCoupons[couponCode]) {
+                const coupon = validCoupons[couponCode];
+                const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                
+                if (subtotal >= coupon.minOrder) {
+                    localStorage.setItem('activeCoupon', JSON.stringify(coupon));
+                    updateOrderSummary();
+                    showAlert(`Coupon "${couponCode}" applied successfully!`, 'success');
+                    couponInput.value = '';
+                } else {
+                    showAlert(`Minimum order of $${coupon.minOrder} required for this coupon`, 'warning');
+                }
+            } else {
+                showAlert('Invalid coupon code', 'error');
+            }
+        }
+        
+        function proceedToCheckout() {
+            if (cartItems.length === 0) {
+                showAlert('Your cart is empty', 'warning');
+                return;
+            }
+            
+            // Check if user is logged in
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showAlert('Please login to proceed to checkout', 'warning');
+                window.location.href = 'login.html?redirect=checkout.html';
+                return;
+            }
+            
+            // Save cart for checkout
+            localStorage.setItem('checkoutCart', JSON.stringify(cartItems));
+            
+            // Redirect to checkout
+            window.location.href = 'checkout.html';
+        }
+        
+        function loadRecentlyViewed() {
+            const recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
+            const container = document.getElementById('recentProducts');
+            
+            if (!container || recentlyViewed.length === 0) {
+                const section = document.getElementById('recentlyViewed');
+                if (section) section.style.display = 'none';
+                return;
+            }
+            
+            // Display recent products
+            container.innerHTML = recentlyViewed.slice(0, 4).map(product => `
+                <div class="product-card">
+                    <div class="product-image" onclick="window.location.href='product-detail.html?id=${product.id}'">
+                        <img src="${product.image || 'images/placeholder.jpg'}" 
+                             alt="${product.name}"
+                             onerror="this.src='images/placeholder.jpg'">
+                    </div>
+                    <div class="product-content">
+                        <h3 onclick="window.location.href='product-detail.html?id=${product.id}'">
+                            ${product.name}
+                        </h3>
+                        <div class="product-price">
+                            <span class="current-price">$${product.price}</span>
+                        </div>
+                        <button class="btn-add-cart" onclick="addToCart('${product.id}')">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+            updateCartCount();
+        }
+        
+        function searchProducts() {
+            const searchInput = document.getElementById('searchInput');
+            const query = searchInput.value.trim();
+            if (query) {
+                window.location.href = `products.html?search=${encodeURIComponent(query)}`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - ElectroShop</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+</head>
+<body>
+    <!-- Loading -->
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand" onclick="window.location.href='index.html'">
+                <i class="fas fa-bolt"></i>
+                <h1>Electro<span>Shop</span></h1>
+            </div>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="products.html"><i class="fas fa-shopping-bag"></i> Shop</a>
+                <div id="userMenu">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Register Section -->
+    <section class="section auth-section">
+        <div class="container">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h1>Create Account</h1>
+                    <p>Join ElectroShop for the best shopping experience</p>
+                </div>
+
+                <div class="auth-card">
+                    <!-- Register Form -->
+                    <form id="registerForm" onsubmit="handleRegister(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" placeholder="John" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" placeholder="Doe" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="email" placeholder="you@example.com" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-phone"></i>
+                                <input type="tel" id="phone" placeholder="(555) 123-4567">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password *</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="password" placeholder="Create a password" required 
+                                       oninput="checkPasswordStrength()">
+                                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="password-strength" id="passwordStrength">
+                                <div class="strength-bar"></div>
+                                <span class="strength-text">Password strength: <span id="strengthText">None</span></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password *</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirmPassword')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="password-match" id="passwordMatch"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox">
+                                <input type="checkbox" id="newsletter" checked>
+                                <span>Subscribe to our newsletter for updates and offers</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox">
+                                <input type="checkbox" id="agreeTerms" required>
+                                <span>I agree to the <a href="#" onclick="showTerms()">Terms of Service</a> and <a href="#" onclick="showPrivacy()">Privacy Policy</a> *</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+
+                        <div class="auth-footer">
+                            <p>Already have an account? <a href="login.html">Login here</a></p>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Benefits -->
+                <div class="auth-benefits">
+                    <h3>Member Benefits</h3>
+                    <div class="benefits-list">
+                        <div class="benefit">
+                            <i class="fas fa-shipping-fast"></i>
+                            <div>
+                                <h4>Free Shipping</h4>
+                                <p>Free delivery on orders over $99</p>
+                            </div>
+                        </div>
+                        <div class="benefit">
+                            <i class="fas fa-percentage"></i>
+                            <div>
+                                <h4>Member Discounts</h4>
+                                <p>Exclusive deals and promotions</p>
+                            </div>
+                        </div>
+                        <div class="benefit">
+                            <i class="fas fa-history"></i>
+                            <div>
+                                <h4>Order History</h4>
+                                <p>Track all your past purchases</p>
+                            </div>
+                        </div>
+                        <div class="benefit">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h4>Faster Checkout</h4>
+                                <p>Save payment and shipping details</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Terms Modal -->
+    <div id="termsModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Terms of Service</h3>
+                <button class="modal-close" onclick="closeTermsModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="terms-content">
+                    <h4>1. Account Registration</h4>
+                    <p>You must provide accurate and complete information when creating an account.</p>
+                    
+                    <h4>2. Order Acceptance</h4>
+                    <p>All orders are subject to acceptance and availability. We reserve the right to refuse any order.</p>
+                    
+                    <h4>3. Pricing and Payment</h4>
+                    <p>Prices are subject to change without notice. Payment must be made in full before order processing.</p>
+                    
+                    <h4>4. Shipping and Delivery</h4>
+                    <p>Shipping times are estimates and may vary. Risk of loss passes to you upon delivery.</p>
+                    
+                    <h4>5. Returns and Refunds</h4>
+                    <p>Returns must be made within 30 days of delivery. Refunds will be processed within 5-7 business days.</p>
+                    
+                    <h4>6. Intellectual Property</h4>
+                    <p>All content on this site is owned by ElectroShop and protected by copyright laws.</p>
+                    
+                    <h4>7. Limitation of Liability</h4>
+                    <p>ElectroShop shall not be liable for any indirect, incidental, or consequential damages.</p>
+                    
+                    <h4>8. Changes to Terms</h4>
+                    <p>We reserve the right to modify these terms at any time. Continued use constitutes acceptance.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeTermsModal()">I Understand</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Modal -->
+    <div id="privacyModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Privacy Policy</h3>
+                <button class="modal-close" onclick="closePrivacyModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="privacy-content">
+                    <h4>1. Information We Collect</h4>
+                    <p>We collect information you provide directly, such as name, email, address, and payment information.</p>
+                    
+                    <h4>2. How We Use Information</h4>
+                    <p>We use your information to process orders, improve our services, and communicate with you.</p>
+                    
+                    <h4>3. Information Sharing</h4>
+                    <p>We do not sell your personal information. We may share information with service providers for order fulfillment.</p>
+                    
+                    <h4>4. Data Security</h4>
+                    <p>We implement security measures to protect your information, but no system is 100% secure.</p>
+                    
+                    <h4>5. Cookies</h4>
+                    <p>We use cookies to enhance your shopping experience and analyze site traffic.</p>
+                    
+                    <h4>6. Your Rights</h4>
+                    <p>You have the right to access, correct, or delete your personal information.</p>
+                    
+                    <h4>7. Children's Privacy</h4>
+                    <p>Our services are not intended for children under 16. We do not knowingly collect their information.</p>
+                    
+                    <h4>8. Changes to Privacy Policy</h4>
+                    <p>We may update this policy periodically. We will notify you of significant changes.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closePrivacyModal()">I Understand</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Electro<span>Shop</span></h3>
+                    </div>
+                    <p>Your trusted electronics marketplace</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="products.html">Shop</a>
+                    <a href="login.html">Login</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="#" onclick="showTerms()">Terms</a>
+                    <a href="#" onclick="showPrivacy()">Privacy</a>
+                    <a href="#">Contact</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ElectroShop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showLoading();
+            
+            // Check if user is already logged in
+            const user = JSON.parse(localStorage.getItem('user'));
+            const token = localStorage.getItem('token');
+            
+            if (user && token) {
+                showAlert('You are already logged in', 'info');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+                return;
+            }
+            
+            // Update user menu
+            updateUserMenu();
+            
+            // Setup form validation
+            setupPasswordValidation();
+            
+            setTimeout(hideLoading, 1000);
+        });
+        
+        async function handleRegister(event) {
+            event.preventDefault();
+            
+            // Get form values
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const newsletter = document.getElementById('newsletter').checked;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            
+            // Validate inputs
+            const errors = [];
+            
+            if (!firstName || !lastName || !email || !password || !confirmPassword) {
+                errors.push('Please fill in all required fields');
+            }
+            
+            if (!validateEmail(email)) {
+                errors.push('Please enter a valid email address');
+            }
+            
+            if (phone && !validatePhone(phone)) {
+                errors.push('Please enter a valid phone number');
+            }
+            
+            if (password.length < 6) {
+                errors.push('Password must be at least 6 characters long');
+            }
+            
+            if (password !== confirmPassword) {
+                errors.push('Passwords do not match');
+            }
+            
+            const passwordStrength = checkPasswordStrength(password);
+            if (passwordStrength.level === 'weak') {
+                errors.push('Please choose a stronger password');
+            }
+            
+            if (!agreeTerms) {
+                errors.push('You must agree to the terms and conditions');
+            }
+            
+            if (errors.length > 0) {
+                showAlert(errors.join('<br>'), 'error');
+                return;
+            }
+            
+            try {
+                showLoading();
+                
+                // API call to register
+                const response = await fetch('http://localhost:5000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        firstName,
+                        lastName,
+                        email,
+                        phone: phone || undefined,
+                        password,
+                        newsletter
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Save token and user data
+                    localStorage.setItem('token', data.data.token);
+                    localStorage.setItem('user', JSON.stringify(data.data.user));
+                    
+                    showAlert('Registration successful! Welcome to ElectroShop!', 'success');
+                    
+                    // Redirect to dashboard
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } else {
+                    throw new Error(data.error || 'Registration failed');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showAlert(error.message || 'Registration failed. Please try again.', 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        function setupPasswordValidation() {
+            const passwordInput = document.getElementById('password');
+            const confirmInput = document.getElementById('confirmPassword');
+            
+            passwordInput.addEventListener('input', checkPasswordStrength);
+            confirmInput.addEventListener('input', checkPasswordMatch);
+        }
+        
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthBar = document.querySelector('.strength-bar');
+            const strengthText = document.getElementById('strengthText');
+            
+            if (!password) {
+                strengthBar.style.width = '0%';
+                strengthBar.className = 'strength-bar';
+                strengthText.textContent = 'None';
+                return { strength: 0, level: 'none' };
+            }
+            
+            let strength = 0;
+            const checks = [
+                password.length >= 8,
+                /[a-z]/.test(password),
+                /[A-Z]/.test(password),
+                /[0-9]/.test(password),
+                /[^A-Za-z0-9]/.test(password)
+            ];
+            
+            checks.forEach(check => {
+                if (check) strength++;
+            });
+            
+            let level = 'weak';
+            let width = '20%';
+            let color = 'error';
+            
+            if (strength >= 4) {
+                level = 'strong';
+                width = '100%';
+                color = 'success';
+            } else if (strength >= 3) {
+                level = 'good';
+                width = '75%';
+                color = 'warning';
+            } else if (strength >= 2) {
+                level = 'fair';
+                width = '50%';
+                color = 'warning';
+            } else {
+                level = 'weak';
+                width = '25%';
+                color = 'error';
+            }
+            
+            strengthBar.style.width = width;
+            strengthBar.className = `strength-bar ${color}`;
+            strengthText.textContent = level.charAt(0).toUpperCase() + level.slice(1);
+            
+            return { strength, level };
+        }
+        
+        function checkPasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            const matchDiv = document.getElementById('passwordMatch');
+            
+            if (!password || !confirm) {
+                matchDiv.innerHTML = '';
+                return;
+            }
+            
+            if (password === confirm) {
+                matchDiv.innerHTML = '<i class="fas fa-check-circle success"></i> Passwords match';
+                matchDiv.className = 'password-match success';
+            } else {
+                matchDiv.innerHTML = '<i class="fas fa-times-circle error"></i> Passwords do not match';
+                matchDiv.className = 'password-match error';
+            }
+        }
+        
+        function togglePasswordVisibility(fieldId) {
+            const passwordInput = document.getElementById(fieldId);
+            const toggleButton = passwordInput.parentNode.querySelector('.toggle-password i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleButton.className = 'fas fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                toggleButton.className = 'fas fa-eye';
+            }
+        }
+        
+        function showTerms() {
+            event.preventDefault();
+            document.getElementById('termsModal').style.display = 'flex';
+        }
+        
+        function closeTermsModal() {
+            document.getElementById('termsModal').style.display = 'none';
+        }
+        
+        function showPrivacy() {
+            event.preventDefault();
+            document.getElementById('privacyModal').style.display = 'flex';
+        }
+        
+        function closePrivacyModal() {
+            document.getElementById('privacyModal').style.display = 'none';
+        }
+        
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        function validatePhone(phone) {
+            const re = /^[\+]?[1-9][\d]{0,15}$/;
+            return re.test(phone.replace(/[\(\)\-\s]/g, ''));
+        }
+        
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

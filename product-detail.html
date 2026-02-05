@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - ElectroShop</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+</head>
+<body>
+    <!-- Loading -->
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading Product...</p>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand" onclick="window.location.href='index.html'">
+                <i class="fas fa-bolt"></i>
+                <h1>Electro<span>Shop</span></h1>
+            </div>
+
+            <div class="nav-search">
+                <input type="text" id="searchInput" placeholder="Search products...">
+                <button onclick="searchProducts()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="products.html"><i class="fas fa-shopping-bag"></i> Shop</a>
+                <a href="cart.html" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <div id="userMenu">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Product Detail -->
+    <section class="section product-detail-section">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="products.html">Shop</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="productCategory">Product</span>
+                <i class="fas fa-chevron-right"></i>
+                <span id="productName">Details</span>
+            </div>
+
+            <div class="product-detail" id="productDetail">
+                <!-- Filled by JavaScript -->
+            </div>
+
+            <!-- Related Products -->
+            <div class="related-products" id="relatedProducts">
+                <h3>Related Products</h3>
+                <div class="products-grid" id="relatedProductsGrid">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Electro<span>Shop</span></h3>
+                    </div>
+                    <p>Premium electronics marketplace.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="products.html">Shop</a>
+                    <a href="cart.html">Cart</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="#">Contact</a>
+                    <a href="#">FAQs</a>
+                    <a href="#">Shipping</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope"></i> support@electroshop.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ElectroShop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/products.js"></script>
+    <script>
+        let currentProduct = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            showLoading();
+            
+            // Get product ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (productId) {
+                loadProduct(productId);
+                loadRelatedProducts(productId);
+            } else {
+                showAlert('Product not found', 'error');
+                setTimeout(() => window.location.href = 'products.html', 2000);
+            }
+            
+            updateUserMenu();
+            updateCartCount();
+            
+            setTimeout(hideLoading, 1000);
+        });
+        
+        async function loadProduct(productId) {
+            try {
+                const response = await fetch(`http://localhost:5000/api/products/${productId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentProduct = data.data;
+                    renderProduct(currentProduct);
+                } else {
+                    throw new Error('Product not found');
+                }
+            } catch (error) {
+                console.error('Error loading product:', error);
+                showAlert('Failed to load product', 'error');
+                setTimeout(() => window.location.href = 'products.html', 2000);
+            }
+        }
+        
+        function renderProduct(product) {
+            const container = document.getElementById('productDetail');
+            if (!container) return;
+            
+            // Update breadcrumb
+            document.getElementById('productCategory').textContent = product.category;
+            document.getElementById('productName').textContent = product.name;
+            
+            // Main product HTML
+            container.innerHTML = `
+                <div class="product-detail-row">
+                    <!-- Product Images -->
+                    <div class="product-images">
+                        <div class="main-image">
+                            <img src="${product.images?.[0]?.url || 'images/placeholder.jpg'}" 
+                                 alt="${product.name}" 
+                                 id="mainProductImage"
+                                 onerror="this.src='images/placeholder.jpg'">
+                            ${product.isFeatured ? '<span class="product-badge featured">Featured</span>' : ''}
+                            ${product.discountPrice ? `<span class="product-badge discount">-${Math.round((1 - product.discountPrice / product.price) * 100)}%</span>` : ''}
+                        </div>
+                        <div class="image-thumbnails" id="imageThumbnails">
+                            ${product.images?.map((img, index) => `
+                                <div class="thumbnail ${index === 0 ? 'active' : ''}" 
+                                     onclick="changeMainImage('${img.url}', this)">
+                                    <img src="${img.url}" alt="${img.alt || product.name}"
+                                         onerror="this.src='images/placeholder.jpg'">
+                                </div>
+                            `).join('') || ''}
+                        </div>
+                    </div>
+                    
+                    <!-- Product Info -->
+                    <div class="product-info">
+                        <div class="product-header">
+                            <h1>${product.name}</h1>
+                            <div class="product-meta">
+                                <span class="product-category">${product.category}</span>
+                                <span class="product-brand">${product.brand}</span>
+                                <span class="product-model">${product.model}</span>
+                            </div>
+                            <div class="product-rating">
+                                <div class="stars">
+                                    ${generateStars(product.rating?.average || 0)}
+                                </div>
+                                <span class="rating-value">${product.rating?.average?.toFixed(1) || '0.0'}</span>
+                                <span class="rating-count">(${product.rating?.count || 0} reviews)</span>
+                                <span class="product-id">SKU: ${product._id.substring(0, 8)}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="product-price">
+                            <span class="current-price">$${product.discountPrice || product.price}</span>
+                            ${product.discountPrice ? `
+                                <span class="old-price">$${product.price}</span>
+                                <span class="discount-percentage">Save ${Math.round((1 - product.discountPrice / product.price) * 100)}%</span>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="product-stock">
+                            <i class="fas ${product.isInStock ? 'fa-check-circle in-stock' : 'fa-times-circle out-of-stock'}"></i>
+                            <span>${product.isInStock ? 'In Stock' : 'Out of Stock'}</span>
+                            <span class="stock-quantity">${product.isInStock ? `${product.stock} units available` : 'Backorder'}</span>
+                        </div>
+                        
+                        <div class="product-description">
+                            <h3>Description</h3>
+                            <p>${product.description}</p>
+                        </div>
+                        
+                        <div class="product-features">
+                            <h3>Key Features</h3>
+                            <ul>
+                                ${product.features?.map(feature => `<li><i class="fas fa-check"></i> ${feature}</li>`).join('') || ''}
+                            </ul>
+                        </div>
+                        
+                        <!-- Add to Cart -->
+                        <div class="product-actions">
+                            <div class="quantity-selector">
+                                <button class="qty-btn" onclick="decreaseQuantity()">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="productQuantity" value="1" min="1" max="${product.stock}">
+                                <button class="qty-btn" onclick="increaseQuantity()">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            
+                            <button class="btn btn-primary btn-add-cart" onclick="addToCartFromDetail()" ${!product.isInStock ? 'disabled' : ''}>
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                            
+                            <button class="btn btn-outline" onclick="toggleWishlist('${product._id}')">
+                                <i class="far fa-heart"></i> Wishlist
+                            </button>
+                            
+                            <button class="btn btn-outline" onclick="shareProduct()">
+                                <i class="fas fa-share-alt"></i> Share
+                            </button>
+                        </div>
+                        
+                        <div class="product-meta-footer">
+                            <div class="meta-item">
+                                <i class="fas fa-shipping-fast"></i>
+                                <span>Free shipping on orders over $99</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-undo-alt"></i>
+                                <span>30-day return policy</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>2-year warranty included</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product Tabs -->
+                <div class="product-tabs">
+                    <div class="tabs-header">
+                        <button class="tab-btn active" onclick="openTab('specifications')">Specifications</button>
+                        <button class="tab-btn" onclick="openTab('reviews')">Reviews (${product.reviews?.length || 0})</button>
+                        <button class="tab-btn" onclick="openTab('shipping')">Shipping & Returns</button>
+                    </div>
+                    
+                    <div class="tabs-content">
+                        <!-- Specifications Tab -->
+                        <div id="specifications" class="tab-pane active">
+                            <div class="specs-table">
+                                ${product.specifications?.map(spec => `
+                                    <div class="spec-row">
+                                        <div class="spec-key">${spec.key}</div>
+                                        <div class="spec-value">${spec.value}</div>
+                                    </div>
+                                `).join('') || '<p>No specifications available.</p>'}
+                            </div>
+                        </div>
+                        
+                        <!-- Reviews Tab -->
+                        <div id="reviews" class="tab-pane">
+                            <div class="reviews-container">
+                                <div class="reviews-summary">
+                                    <div class="overall-rating">
+                                        <h3>${product.rating?.average?.toFixed(1) || '0.0'}</h3>
+                                        <div class="stars">${generateStars(product.rating?.average || 0)}</div>
+                                        <p>Based on ${product.rating?.count || 0} reviews</p>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="openReviewModal()">
+                                        <i class="fas fa-pen"></i> Write a Review
+                                    </button>
+                                </div>
+                                
+                                <div class="reviews-list" id="reviewsList">
+                                    ${product.reviews?.slice(0, 5).map(review => `
+                                        <div class="review-item">
+                                            <div class="review-header">
+                                                <div class="reviewer">
+                                                    <i class="fas fa-user-circle"></i>
+                                                    <div>
+                                                        <h4>${review.title}</h4>
+                                                        <div class="stars">${generateStars(review.rating)}</div>
+                                                    </div>
+                                                </div>
+                                                <span class="review-date">${new Date(review.createdAt).toLocaleDateString()}</span>
+                                            </div>
+                                            <p class="review-comment">${review.comment}</p>
+                                            ${review.verifiedPurchase ? '<span class="verified-badge">Verified Purchase</span>' : ''}
+                                        </div>
+                                    `).join('') || '<p>No reviews yet. Be the first to review this product!</p>'}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Shipping Tab -->
+                        <div id="shipping" class="tab-pane">
+                            <div class="shipping-info">
+                                <h3>Shipping Information</h3>
+                                <ul>
+                                    <li><i class="fas fa-shipping-fast"></i> <strong>Standard Shipping:</strong> 3-5 business days - $9.99 (Free on orders over $99)</li>
+                                    <li><i class="fas fa-rocket"></i> <strong>Express Shipping:</strong> 1-2 business days - $19.99</li>
+                                    <li><i class="fas fa-gift"></i> <strong>Same Day Delivery:</strong> Available in select areas - $29.99</li>
+                                </ul>
+                                
+                                <h3>Return Policy</h3>
+                                <ul>
+                                    <li><i class="fas fa-undo-alt"></i> 30-day return policy for all products</li>
+                                    <li><i class="fas fa-box"></i> Products must be in original condition with packaging</li>
+                                    <li><i class="fas fa-sync-alt"></i> Free returns for defective products</li>
+                                    <li><i class="fas fa-credit-card"></i> Refunds processed within 5-7 business days</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+            
+            let stars = '';
+            for (let i = 0; i < fullStars; i++) stars += '<i class="fas fa-star"></i>';
+            if (halfStar) stars += '<i class="fas fa-star-half-alt"></i>';
+            for (let i = 0; i < emptyStars; i++) stars += '<i class="far fa-star"></i>';
+            return stars;
+        }
+        
+        function changeMainImage(imageUrl, element) {
+            const mainImage = document.getElementById('mainProductImage');
+            if (mainImage) {
+                mainImage.src = imageUrl;
+            }
+            
+            // Update active thumbnail
+            document.querySelectorAll('.thumbnail').forEach(thumb => {
+                thumb.classList.remove('active');
+            });
+            element.classList.add('active');
+        }
+        
+        function decreaseQuantity() {
+            const input = document.getElementById('productQuantity');
+            if (input) {
+                const current = parseInt(input.value) || 1;
+                if (current > 1) {
+                    input.value = current - 1;
+                }
+            }
+        }
+        
+        function increaseQuantity() {
+            const input = document.getElementById('productQuantity');
+            if (input && currentProduct) {
+                const current = parseInt(input.value) || 1;
+                if (current < currentProduct.stock) {
+                    input.value = current + 1;
+                } else {
+                    showAlert(`Only ${currentProduct.stock} units available`, 'warning');
+                }
+            }
+        }
+        
+        function addToCartFromDetail() {
+            if (!currentProduct) return;
+            
+            const quantityInput = document.getElementById('productQuantity');
+            const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
+            
+            addToCart(currentProduct._id, quantity);
+            
+            // Show success message
+            showAlert(`Added ${quantity} ${currentProduct.name} to cart`, 'success');
+            
+            // Update cart count
+            updateCartCount();
+        }
+        
+        async function loadRelatedProducts(productId) {
+            try {
+                const response = await fetch(`http://localhost:5000/api/products/${productId}/related`);
+                const data = await response.json();
+                
+                if (data.success && data.data.length > 0) {
+                    renderRelatedProducts(data.data);
+                }
+            } catch (error) {
+                console.error('Error loading related products:', error);
+            }
+        }
+        
+        function renderRelatedProducts(products) {
+            const container = document.getElementById('relatedProductsGrid');
+            if (!container) return;
+            
+            if (products.length === 0) {
+                container.innerHTML = '<p>No related products found.</p>';
+                return;
+            }
+            
+            container.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-image" onclick="window.location.href='product-detail.html?id=${product._id}'">
+                        <img src="${product.images?.[0]?.url || 'images/placeholder.jpg'}" 
+                             alt="${product.name}"
+                             onerror="this.src='images/placeholder.jpg'">
+                        <div class="product-overlay">
+                            <button class="btn-quick-view" onclick="quickView('${product._id}')">
+                                <i class="fas fa-eye"></i> Quick View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-category">${product.category}</div>
+                        <h3 class="product-title" onclick="window.location.href='product-detail.html?id=${product._id}'">
+                            ${product.name}
+                        </h3>
+                        <div class="product-price">
+                            <span class="current-price">$${product.discountPrice || product.price}</span>
+                        </div>
+                        <button class="btn-add-cart" onclick="addToCart('${product._id}')">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function openTab(tabName) {
+            // Hide all tab panes
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab pane
+            const selectedPane = document.getElementById(tabName);
+            if (selectedPane) {
+                selectedPane.classList.add('active');
+            }
+            
+            // Activate selected tab button
+            event.target.classList.add('active');
+        }
+        
+        function openReviewModal() {
+            // Check if user is logged in
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showAlert('Please login to write a review', 'warning');
+                window.location.href = 'login.html?redirect=product-detail.html?id=' + currentProduct._id;
+                return;
+            }
+            
+            // Create review modal
+            const modalHTML = `
+                <div class="modal-overlay" id="reviewModal">
+                    <div class="modal">
+                        <div class="modal-header">
+                            <h3>Write a Review</h3>
+                            <button class="modal-close" onclick="closeReviewModal()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Rating</label>
+                                <div class="rating-input" id="reviewRating">
+                                    ${[1,2,3,4,5].map(i => `
+                                        <i class="far fa-star" data-rating="${i}" onclick="setReviewRating(${i})"></i>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" id="reviewTitle" placeholder="Summary of your review">
+                            </div>
+                            <div class="form-group">
+                                <label>Your Review</label>
+                                <textarea id="reviewComment" rows="4" placeholder="Share your experience with this product..."></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-outline" onclick="closeReviewModal()">Cancel</button>
+                            <button class="btn btn-primary" onclick="submitReview()">Submit Review</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add modal to body
+            const modalContainer = document.createElement('div');
+            modalContainer.innerHTML = modalHTML;
+            document.body.appendChild(modalContainer);
+        }
+        
+        function closeReviewModal() {
+            const modal = document.getElementById('reviewModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+        
+        function setReviewRating(rating) {
+            const stars = document.querySelectorAll('#reviewRating i');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.className = 'fas fa-star';
+                } else {
+                    star.className = 'far fa-star';
+                }
+            });
+        }
+        
+        function submitReview() {
+            // Implementation for submitting review
+            showAlert('Review submitted successfully!', 'success');
+            closeReviewModal();
+        }
+        
+        function shareProduct() {
+            if (navigator.share) {
+                navigator.share({
+                    title: currentProduct.name,
+                    text: `Check out ${currentProduct.name} on ElectroShop`,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(window.location.href);
+                showAlert('Link copied to clipboard!', 'success');
+            }
+        }
+        
+        function quickView(productId) {
+            window.location.href = `product-detail.html?id=${productId}`;
+        }
+        
+        function searchProducts() {
+            const searchInput = document.getElementById('searchInput');
+            const query = searchInput.value.trim();
+            if (query) {
+                window.location.href = `products.html?search=${encodeURIComponent(query)}`;
+            }
+        }
+    </script>
+</body>
+</html>
