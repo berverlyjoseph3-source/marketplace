@@ -1,5 +1,5 @@
 // API Service Module
-const API_BASE = 'electohub-backend-production.up.railway.app/api';
+const API_BASE = 'https://electohub-backend-production.up.railway.app/api';
 
 const API = {
   // Auth endpoints
@@ -191,7 +191,8 @@ async function fetchData(url, options = {}) {
     
     const response = await fetch(url, {
       ...options,
-      headers
+      headers,
+      credentials: 'include'
     });
     
     if (response.status === 401) {
