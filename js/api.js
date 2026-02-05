@@ -1,5 +1,5 @@
 // API Service Module
-const API_BASE = 'https://electohub-backend-production.up.railway.app/api';
+const API_BASE = 'electohub-backend-production.up.railway.app/api';
 
 const API = {
   // Auth endpoints
